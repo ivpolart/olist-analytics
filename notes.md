@@ -63,3 +63,35 @@ SQL queries live in the `sql/` folder; this file holds conclusions only.
 2. Calculate revenue only from orders with status `delivered`.
 3. Calculate delivery times only for `delivered` orders with all dates filled in.
 4. Do not join `order_items` and `order_payments` directly: aggregate each to the order level first.
+
+---
+
+## OLIST-2 · Sales Trends
+
+**Date:** 2026-10-12
+**SQL:** `sql/03_sales_trends.sql`
+**Stakeholder:** commercial director (preparing an investor presentation)
+
+### Definitions agreed with the stakeholder
+
+- Sales (revenue) = sum of item prices, without freight.
+- Only delivered orders.
+- An order belongs to the month of purchase.
+
+### Findings
+
+1. **Working period: January 2017 – August 2018** (20 full months). Sep–Dec 2016 is the platform launch (1, 265, 0 and 1 orders), and the data ends after August 2018.
+2. **Year-over-year growth:** 21,998 orders in Jan–Aug 2017 vs 52,783 in Jan–Aug 2018, **x2.4**.
+3. **But growth stopped in 2018:** orders plateau at about 6–7k per month and even slipped from 7,069 in January to 6,351 in August (about −10%).
+4. **Average order value is stable at about 136** in both periods (change < 1%). Revenue grew only because the number of orders grew.
+5. **November 2017 is a one-off spike:** revenue +52% vs October, then about −26% in December. The peak comes from a few days around _[fill in after step 6: date and number of orders]_.
+
+### Lessons learned
+
+- After a join, count orders with `COUNT(DISTINCT order_id)`, not `COUNT(*)`.
+- AOV for a period = total revenue / total orders, not the average of monthly AOVs.
+- Month-over-month % growth from a small base is misleading: check the absolute change too.
+
+### Answer to the stakeholder (draft)
+
+> Year over year we have 2.4 times more orders, but this growth happened in 2017. In 2018 orders are flat at 6–7k per month. Average order value is stable (~136), so revenue follows the number of orders. The best month is November 2017 (+52% vs October), driven by _[step 6 finding]_.
